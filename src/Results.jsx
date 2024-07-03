@@ -12,7 +12,6 @@ function Results({jsonData, isCorrect, hasSubmitted}) {
         <div>
         {
             <div key={jsonData.char_id}>
-            <h1>{jsonData.character}</h1>
             <p>Name: {jsonData.name}</p>
             <p>Pronounciation: {jsonData.pronunciation}</p>
             <p>Romanization: {jsonData.romanization[0]} {jsonData.romanization[1]}</p>
@@ -20,9 +19,6 @@ function Results({jsonData, isCorrect, hasSubmitted}) {
             </div>
         }
         </div>
-        <label>
-            The correct word is: {jsonData.char_id}
-        </label>
         </>
 
     return(hasSubmitted ? result : null);
