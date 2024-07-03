@@ -7,13 +7,13 @@ import hangulJson from './hangul.json'
 import axios from 'axios';
 import PropTypes from 'prop-types'
 
-const App = ({firstHangulJson}) => {
+const App = () => {
   var wordsToShow = hangulJson.slice();
   var currentWord = hangulJson[0];
 
   const [isCorrect, setIsCorrect] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [currentHangulJson, setCurrentHangulJson] = useState(firstHangulJson);
+  const [currentHangulJson, setCurrentHangulJson] = useState(currentWord);
 
   function removeCurrentWord() {
     console.log("Removing " + currentWord + " from the list");
@@ -80,8 +80,8 @@ const App = ({firstHangulJson}) => {
   )
 }
 
-App.propTypes = {
-  firstHangulJson : PropTypes.jsonData
-}
+// App.propTypes = {
+//   firstHangulJson : PropTypes.jsonData
+// }
 
 export default App
