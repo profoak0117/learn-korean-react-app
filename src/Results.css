@@ -1,6 +1,27 @@
 .correctStringLabel {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 40px;
+    color: #76b174;
+    font-weight: 700;
+}
+
+.incorrectStringLabel {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 40px;
+    color: #da6666;
+    font-weight: 700;
+}
+
+.resultInfoLabel {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 30px;
-    color: #4c6fb1;
-    background-color: whitesmoke;
+    color: #a2b9e4;
+    font-weight: 700;
+}
+
+.resultCategoryLabel{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 30px;
+    color: #b9734b;
+    font-weight: 400;
 }
