@@ -5,7 +5,7 @@ function Results({jsonData, isCorrect, hasSubmitted}) {
 
     const result = 
         <>
-        <label>
+        <label className correctStringLabel>
             {correctString}
         </label>
         <div></div>
