@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "proxy": "http://localhost:5000",
+  "homepage": "https://profoak0117.github.io/learn-korean-react-app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -34,6 +35,5 @@
   "main": "vite.config.js",
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "homepage": "http://profoak0117.github.io/learn-korean-react-app"
+  "license": "ISC"
 }
