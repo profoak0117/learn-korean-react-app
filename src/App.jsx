@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import HangulImage from './HangulImage.jsx'
 import TextBox from './TextBox.jsx'
@@ -10,10 +8,35 @@ import axios from 'axios';
 import PropTypes from 'prop-types'
 
 const App = ({firstHangulJson}) => {
-  const [count, setCount] = useState(0)
+  var wordsToShow = hangulJson.slice();
+  var currentWord = hangulJson[0];
+
   const [isCorrect, setIsCorrect] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [currentHangulJson, setCurrentHangulJson] = useState(firstHangulJson);
+
+  function removeCurrentWord() {
+    console.log("Removing " + currentWord + " from the list");
+    let idx = wordsToShow.findIndex(item => item.char_id == currentWord.char_id);
+    if(idx != -1) {
+      wordsToShow.splice(idx, 1);
+    } else {
+      console.log("currentWord: " + currentWord.char_id + " does not exist. It has already been removed.");
+    }
+  }
+
+  function getNextWord() {
+    console.log("Getting next word");
+    if(wordsToShow.length == 0) {
+      console.log("Resetting the wordsToShow list");
+      wordsToShow = hangulJson.slice();
+    }
+    let newIndex = Math.floor(Math.random() * wordsToShow.length);
+    const nextWord = wordsToShow[newIndex];
+    currentWord = nextWord;
+    console.log("The next word is: %j", nextWord);
+    return(nextWord);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -30,7 +53,7 @@ const App = ({firstHangulJson}) => {
         if (formJson["answerInput"].toUpperCase() == correctWord[word].toUpperCase()) {
             console.log("correct answer");
             setIsCorrect(true);
-            axios.post('http://localhost:5000/api/removeCurrentWord');
+            removeCurrentWord();
             break;
         } else {
             console.log("incorrect answer");
@@ -44,39 +67,12 @@ const App = ({firstHangulJson}) => {
     e.preventDefault();
     console.log("handling next word");
     setHasSubmitted(false);
-    axios.get('http://localhost:5000/api/getNextWord')
-      .then(response => {
-        console.log("response: %j", response);
-        setCurrentHangulJson(response.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    setCurrentHangulJson(getNextWord());
     console.log("currentHangulJson: %j", currentHangulJson);
   }
 
   return (
     <>
-      {/* <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React </h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
       <HangulImage hangulCharacter={currentHangulJson.character}/>
       <TextBox correctWord={currentHangulJson.romanization} onAnswerSubmitted={handleSubmit} handleNextClicked={handleNextWord} hideSubmit={hasSubmitted}/>
       <Results jsonData={currentHangulJson} isCorrect={isCorrect} hasSubmitted={hasSubmitted}/>
