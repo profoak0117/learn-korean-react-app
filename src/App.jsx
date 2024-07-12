@@ -7,16 +7,23 @@ import hangulJson from './hangul.json'
 import axios from 'axios';
 import PropTypes from 'prop-types'
 
-const App = () => {
-  var wordsToShow = hangulJson.slice();
-  var currentWord = hangulJson[0];
+var timesToSkip = new Map();
+var totalTimesToSkip = new Map();
+var wordsToShow = hangulJson.slice();
+var currentWord = hangulJson[0];
+wordsToShow.forEach((currentElement) => {
+  timesToSkip.set(currentElement.char_id, Number(0));
+  totalTimesToSkip.set(currentElement.char_id, Number(0));
+  console.log("prev time ot skip : " + currentElement.char_id + " set to " + Number(0));
+});
+console.log([...timesToSkip]);
 
+const App = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [currentHangulJson, setCurrentHangulJson] = useState(currentWord);
 
   function removeCurrentWord() {
-    console.log("Removing " + currentWord + " from the list");
     let idx = wordsToShow.findIndex(item => item.char_id == currentWord.char_id);
     if(idx != -1) {
       wordsToShow.splice(idx, 1);
@@ -30,6 +37,17 @@ const App = () => {
     if(wordsToShow.length == 0) {
       console.log("Resetting the wordsToShow list");
       wordsToShow = hangulJson.slice();
+      for(var word in wordsToShow){
+        let curWord = word.char_id.toLowerCase();
+        let curTimesToSkip = timesToSkip.get(curWord);
+        if (curTimesToSkip != 0) {
+          currentWord = word;
+          removeCurrentWord();
+          timesToSkip.set(curWord, curTimesToSkip-Number(1));
+          console.log("Old cur times to skip: " + curTimesToSkip);
+          console.log("New cur times to skip: " + (curTimesToSkip-Number(1)));
+        }
+      }
     }
     let newIndex = Math.floor(Math.random() * wordsToShow.length);
     const nextWord = wordsToShow[newIndex];
@@ -54,6 +72,13 @@ const App = () => {
             console.log("correct answer");
             setIsCorrect(true);
             removeCurrentWord();
+            let currentHangulJsonIdx = currentHangulJson.char_id.toLowerCase();
+            let newTotalTimeToSkip = Number(totalTimesToSkip.get(currentHangulJsonIdx)) + Number(1);
+            console.log("oldTotalTimeToSkip: " + (newTotalTimeToSkip - Number(1)));
+            totalTimesToSkip.set(currentHangulJsonIdx, newTotalTimeToSkip);
+            console.log("newTotalTimeToSkip: " + Number(totalTimesToSkip.get(currentHangulJsonIdx)));
+            timesToSkip.set(currentHangulJsonIdx, newTotalTimeToSkip);
+            console.log("time to skip: " + timesToSkip.get(currentHangulJsonIdx));
             break;
         } else {
             console.log("incorrect answer");
